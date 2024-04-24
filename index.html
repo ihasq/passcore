@@ -15,14 +15,14 @@
 		</style>
 	</head>
 	<body>
+		<label>Length: <input id="token-length" type="number" value="16"/></label><br>
 		<div id="token-config">
-			<label>Length: <input id="token-length" type="number" value="16"/></label><br>
 			<label>a ~ z<input type="checkbox" id="token-lowercase" checked/></label>
 			<label>A ~ Z<input type="checkbox" id="token-uppercase" checked/></label>
 			<label>0 ~ 9<input type="checkbox" id="token-number"  checked/></label><br>
 			<label>Special token: <input type="checkbox" id="token-special" checked/></label>
-			<input type="text" id="token-special-list" value="!#$%&'()=~|`{+*}<>?_"/>
 		</div>
+		<input type="text" id="token-special-list" value="!#$%&'()=~|`{+*}<>?_"/>
 		<h1 id="out"></h1>
 		<label>Copy to clipboard <input type="checkbox" id="copy-to-clipboard"/></label>
 		<script>
@@ -97,7 +97,7 @@
 								navigator.clipboard.writeText(result);
 							}
 						}
-					}
+					};
 
 				})()
 
@@ -108,8 +108,8 @@
 					$`#token-special-list`.hidden = !$`#token-special`.checked
 				}, { passive: true });
 
-				$`#token-length`.addEventListener('keydown', () => setTimeout(setPass), { passive: true });
-				$`#token-special-list`.addEventListener('keydown', () => setTimeout(setPass), { passive: true });
+				$`#token-length`.addEventListener('input', () => setTimeout(setPass), { passive: true });
+				$`#token-special-list`.addEventListener('input', () => setTimeout(setPass), { passive: true });
 
 				window.onload = setPass;
 

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Passcore</title>
+		<style>
+			h1 {
+				font-family: 'Courier New', Courier, monospace;
+			}
+
+			h1, label {
+				user-select: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="token-config">
+			<label>Length: <input id="token-length" type="number" value="16"/></label><br>
+			<label>a ~ z<input type="checkbox" id="token-lowercase" checked/></label>
+			<label>A ~ Z<input type="checkbox" id="token-uppercase" checked/></label>
+			<label>0 ~ 9<input type="checkbox" id="token-number"  checked/></label><br>
+			<label>Special token: <input type="checkbox" id="token-special" checked/></label>
+			<input type="text" id="token-special-list" value="!#$%&'()=~|`{+*}<>?_"/>
+		</div>
+		<h1 id="out"></h1>
+		<label>Copy to clipboard <input type="checkbox" id="copy-to-clipboard"/></label>
+		<script>
+			"use strict";
+
+			{
+				const $ = selectors => document.querySelector(selectors);
+
+				const setPass = (() => {
+
+					const getPass = (() => {
+
+						const getValue = (() => {
+
+							const memSize = 1024;
+							const baseArrayBuffer = new Uint8Array(memSize);
+							const baseTokenArray = [];
+
+							let count = memSize;
+
+							return () => {
+								if(count === memSize) {
+									Object.assign(baseTokenArray, crypto.getRandomValues(baseArrayBuffer));
+									count = 0;
+								}
+								const baseToken = baseTokenArray[count];
+								count++;
+								return baseToken / 256;
+							}
+
+						})();
+
+						return ({ length, token: { lower, upper, number, special } }) => {
+
+							if(!(lower || upper || number || special) || !length) {
+								return undefined;
+							}
+
+							const tokens = 
+								(lower? "abcdefghijklmnopqrstuvwxyz" : "") +
+								(upper? "ABCDEFGHIJKLMNOPQRSTUVWXYZ" : "") +
+								(number? "0123456789" : "") +
+								(special? $`#token-special-list`.value : "")
+							const tokensLength = tokens.length;
+
+							let strBuffer = "";
+
+							for(let passIndex = 0; passIndex < length; passIndex++) {
+								strBuffer += tokens[Math.floor(getValue() * tokensLength)];
+							}
+
+							return strBuffer;
+
+						}
+
+					})();
+
+					return () => {
+						const result = getPass({
+							length: $`#token-length`.value,
+							token: {
+								lower: $`#token-lowercase`.checked,
+								upper: $`#token-uppercase`.checked,
+								number: $`#token-number`.checked,
+								special: $`#token-special`.checked
+							}
+						});
+
+						if(result) {
+							$`#out`.textContent = result;
+							if($`#copy-to-clipboard`.checked) {
+								navigator.clipboard.writeText(result);
+							}
+						}
+					}
+
+				})()
+
+				$`#token-config`.addEventListener('change', setPass, { passive: true });
+				$`#out`.addEventListener('click', setPass, { passive: true });
+
+				$`#token-special`.addEventListener('change', () => {
+					$`#token-special-list`.hidden = !$`#token-special`.checked
+				}, { passive: true });
+
+				window.onload = setPass;
+
+			}
+		</script>
+	</body>
+</html>

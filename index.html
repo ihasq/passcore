@@ -108,6 +108,9 @@
 					$`#token-special-list`.hidden = !$`#token-special`.checked
 				}, { passive: true });
 
+				$`#token-length`.addEventListener('keydown', () => setTimeout(setPass), { passive: true });
+				$`#token-special-list`.addEventListener('keydown', () => setTimeout(setPass), { passive: true });
+
 				window.onload = setPass;
 
 			}

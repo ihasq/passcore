@@ -39,16 +39,15 @@
 
 							const memSize = 1024;
 							const baseArrayBuffer = new Uint8Array(memSize);
-							const baseTokenArray = [];
 
 							let count = memSize;
 
 							return () => {
 								if(count === memSize) {
-									Object.assign(baseTokenArray, crypto.getRandomValues(baseArrayBuffer));
+									crypto.getRandomValues(baseArrayBuffer);
 									count = 0;
 								}
-								const baseToken = baseTokenArray[count];
+								const baseToken = baseArrayBuffer[count];
 								count++;
 								return baseToken / 256;
 							}

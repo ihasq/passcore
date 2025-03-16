@@ -41,7 +41,7 @@ const Main = () => {
 			<label>Special token: <input ${{ type: "checkbox", checked: use_special }}/></label>
 		</div>
 		<input ${{ type: "text", value: special, disabled: use_special.into($ => !$) }}/>
-		<h1 ${{ [on.click]: refreshPass }}>${pass}</h1>
+		<h1 ${{ [on.click]: refreshPass, [css.filter]: "blur(4px)" }}>${pass}</h1>
 		<input ${{ type: "button", value: "copy", [on.click]: () => navigator.clipboard.writeText(pass.$)}}/>
 	`;
 }

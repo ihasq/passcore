@@ -24,25 +24,48 @@ const Main = () => {
 		use_a_z = $(true).watch(refreshPass),
 		use_A_Z = $(true).watch(refreshPass),
 		use_1_9 = $(true).watch(refreshPass),
-		use_special = $(true).watch(refreshPass),
+		use_special = $(false).watch(refreshPass),
 		special = $("!#$%&'()=~|\`{+*}<>?_").watch(refreshPass),
 
-		passBaseBuffer = new Uint32Array(256);
+		passBaseBuffer = new Uint32Array(1024);
 	;
 
 	refreshPass();
 
 	return html`
-		<label>Length: ${length}<input ${{ type: "range", value: length, min: 4, max: 256, [css.width]: "50%" }}></label><br>
+
+		<label>Length: ${length}<input ${{ type: "range", value: length, min: 4, max: 1024, [css.width]: "50%" }}></label>
+		<br>
+
 		<div>
 			<label>a ~ z<input ${{ type: "checkbox", checked: use_a_z }}/></label>
 			<label>A ~ Z<input ${{ type: "checkbox", checked: use_A_Z }}/></label>
 			<label>0 ~ 9<input ${{ type: "checkbox", checked: use_1_9 }}/></label><br>
 			<label>Special token: <input ${{ type: "checkbox", checked: use_special }}/></label>
+			<input ${{ type: "text", value: special, disabled: use_special.into($ => !$) }}/>
 		</div>
-		<input ${{ type: "text", value: special, disabled: use_special.into($ => !$) }}/>
-		<h1 ${{ [on.click]: refreshPass, [css.filter]: "blur(4px)" }}>${pass}</h1>
-		<input ${{ type: "button", value: "copy", [on.click]: () => navigator.clipboard.writeText(pass.$)}}/>
+
+		<!-- <br> -->
+
+		<input ${{
+			type: "button",
+			value: "copy",
+			[on.click]: () => navigator.clipboard.writeText(pass.$)
+		}}/>
+		<input ${{
+			type: "button",
+			value: "refresh",
+			[on.click]: refreshPass
+		}}/>
+
+		<h1 ${{
+			[css]: {
+				filter: "blur(4px)",
+				wordBreak: "break-all",
+			}
+		}}>${pass}</h1>
+
+
 	`;
 }
 

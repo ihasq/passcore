@@ -14,14 +14,12 @@ const Main = () => {
 		passBaseBuffer = new Uint32Array(1024),
 
 		template = length.tick()
-			.and(use_a_z.and("abcdefghijklmnopqrstuvwxyz").or(""))
+			.or(use_a_z.and("abcdefghijklmnopqrstuvwxyz").or(""))
 			.sum(use_A_Z.and("ABCDEFGHIJKLMNOPQRSTUVWXYZ").or(""))
 			.sum(use_1_9.and("0123456789").or(""))
 			.sum(use_special.and(special).or(""))
 			.into($ => Array.from(crypto.getRandomValues(passBaseBuffer)).slice(0, length.$).map(q => $[Math.floor(q * $.length / (2 ** 32 - 1))]).join(""))
 	;
-
-	// refreshPass();
 
 	return html`
 
@@ -42,11 +40,6 @@ const Main = () => {
 			type: "button",
 			value: "copy",
 			[on.click]: () => navigator.clipboard.writeText(template.$)
-		}}/>
-		<input ${{
-			type: "button",
-			value: "refresh",
-			// [on.click]: refreshPass
 		}}/>
 
 		<h1 ${{

@@ -1,4 +1,4 @@
-import { $, h as html, on, css } from "https://esm.sh/libh@0.0.102";
+import { $, h as html, on, css } from "https://esm.sh/hstd@0.1.0";
 
 const Main = () => {
 

@@ -23,7 +23,7 @@ const Main = () => {
 
 	return html`
 
-		<label>Length: ${length}<input ${{ type: "rkange", value: length, min: 4, max: 1024, [css]: { width: "50%" } }}></label>
+		<label>Length: ${length}<input ${{ type: "range", value: length, min: 4, max: 1024, [css]: { width: "50%" } }}></label>
 		<br>
 
 		<div>
